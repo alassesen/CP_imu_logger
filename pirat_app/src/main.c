@@ -14,6 +14,7 @@
 // #include <zephyr/fs/littlefs.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/storage/flash_map.h>
+#include <zephyr/sys/poweroff.h>
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -67,11 +68,15 @@ int main(void) {
   double mag_x_out, mag_y_out, mag_z_out;
 #endif
   bool led_state_on = false;
-
+  ret = usb_enable(NULL);
+  if (ret != 0) {
+    LOG_ERR("Failed to enable USB");
+    return 0;
+  }
   while (1) {
     led_state_on = !led_state_on;
     if (requested_state != current_state) {
-      if (current_state == 2) {
+      if (current_state == SYSTEM_LOGGING) {
         // Close File
         ret = fs_close(&file);
         if (ret < 0) {
@@ -88,7 +93,7 @@ int main(void) {
         }
       }
 
-      if (requested_state == 2) {
+      if (requested_state == SYSTEM_LOGGING) {
         // Open file
         usb_disable();
         fs_mount(&fs_mnt);
@@ -117,13 +122,13 @@ int main(void) {
       current_state = requested_state;
     }
 
-    if (current_state == 1) {
+    if (current_state == SYSTEM_IDLE) {
       // "Idle state"
       led_update(BLUE_LED, true);
-      k_sleep(K_MSEC(250));
+      k_sleep(K_MSEC(200));
       led_update(BLUE_LED, false);
       k_sleep(K_MSEC(2500));
-    } else if (current_state == 2) {
+    } else if (current_state == SYSTEM_LOGGING) {
       // "Starting Logging"
 #ifdef CONFIG_MPU9250
       get_mpu9250_values(&accel_x_out, &accel_y_out, &accel_z_out, &gyro_x_out,
@@ -142,13 +147,30 @@ int main(void) {
 #endif
       fs_write(&file, text_to_file, strlen(text_to_file));
       led_update(RED_LED, led_state_on);
-      k_sleep(K_MSEC(100));
-    } else if (current_state == 3) {
+      k_sleep(K_MSEC(50));
+    } else if (current_state == SYSTEM_STOP_LOGGING) {
       // "Stop Logging"
       led_update(GREEN_LED, true);
-      k_sleep(K_MSEC(250));
+      k_sleep(K_MSEC(200));
       led_update(GREEN_LED, false);
       k_sleep(K_MSEC(2500));
+    } else if (current_state == SYSTEM_OFF) {
+      // "Stop Logging"
+      led_update(RED_LED, true);
+      k_sleep(K_MSEC(500));
+      led_update(GREEN_LED, true);
+      k_sleep(K_MSEC(500));
+      led_update(RED_LED, false);
+      k_sleep(K_MSEC(500));
+      led_update(BLUE_LED, true);
+      k_sleep(K_MSEC(500));
+      led_update(GREEN_LED, false);
+      k_sleep(K_MSEC(500));
+      led_update(RED_LED, true);
+      k_sleep(K_MSEC(500));
+      led_update(RED_LED, false);
+      led_update(BLUE_LED, false);
+      sys_poweroff();
     }
   }
 }
