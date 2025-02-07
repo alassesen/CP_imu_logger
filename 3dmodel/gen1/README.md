@@ -1,6 +1,7 @@
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 # 3D-model generation 1
+![3d model photo](raket.png)
 
 ## Raket spids med gevind
 ![3d model photo](raket-spids-med-gevind.png)
