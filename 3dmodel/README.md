@@ -1,7 +1,7 @@
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 # 3D-model til en luftraket prototype
-* Første generation: [gen1]
+* [Første generation](gen1)
 
 
 This work is licensed under a
