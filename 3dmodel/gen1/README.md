@@ -8,6 +8,11 @@
 ## Raket bund med gevind
 ![3d model photo](raket-bund-med-gevind.png)
 
+## Raket mellemstykke kort med gevind
+![3d model photo](raket-mellemstykke-kort-med-gevind.png)
+
+## Raket finne
+![3d model photo](raket-finne.png)
 
 
 This work is licensed under a
