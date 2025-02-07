@@ -2,6 +2,8 @@
 
 # 3D-model generation 1
 
+# Raket spids med gevind
+![3d model photo](raket-spids-med-gevind.png)
 
 
 
