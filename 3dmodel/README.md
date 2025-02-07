@@ -1,7 +1,7 @@
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 # 3D-model til en luftraket prototype
-
+![3d model photo](raket-spids-med-gevind.png)
 
 
 
