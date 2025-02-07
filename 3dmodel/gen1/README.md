@@ -15,9 +15,11 @@
 ## Raket finne
 ![3d model photo](raket-finne.png)
 
+## Raket elektronikholder
+![3d model photo](raket-elektronikholder.png)
+
 ## Enclosure NRF52840 sense
 ![3d model photo](enclosure-nrf52840sense.png)
-
 
 This work is licensed under a
 [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
