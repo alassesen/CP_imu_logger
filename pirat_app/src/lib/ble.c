@@ -25,7 +25,8 @@
 #include <zephyr/bluetooth/uuid.h>
 
 LOG_MODULE_REGISTER(ble);
-int requested_state = 1;
+extern int requested_state;
+extern char filename[];
 
 /* Button value. */
 static uint16_t but_val;
@@ -35,6 +36,10 @@ static ssize_t recv(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                     const void *buf, uint16_t len, uint16_t offset,
                     uint8_t flags);
 
+static ssize_t file_recv(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                         const void *buf, uint16_t len, uint16_t offset,
+                         uint8_t flags);
+
 /* ST Custom Service  */
 static const struct bt_uuid_128 st_service_uuid = BT_UUID_INIT_128(
     BT_UUID_128_ENCODE(0x0000fe40, 0xcc7a, 0x482a, 0x984a, 0x7f2ed5b3e58f));
@@ -42,6 +47,9 @@ static const struct bt_uuid_128 st_service_uuid = BT_UUID_INIT_128(
 /* ST LED service */
 static const struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(
     BT_UUID_128_ENCODE(0x0000fe41, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19));
+
+static const struct bt_uuid_128 file_char_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0x0000fe43, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19));
 
 /* ST Notify button service */
 static const struct bt_uuid_128 but_notif_uuid = BT_UUID_INIT_128(
@@ -95,6 +103,9 @@ BT_GATT_SERVICE_DEFINE(
     BT_GATT_CHARACTERISTIC(&led_char_uuid.uuid,
                            BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE_WITHOUT_RESP,
                            BT_GATT_PERM_WRITE, NULL, recv, (void *)1),
+    BT_GATT_CHARACTERISTIC(&file_char_uuid.uuid,
+                           BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE_WITHOUT_RESP,
+                           BT_GATT_PERM_WRITE, NULL, file_recv, (void *)1),
     BT_GATT_CHARACTERISTIC(&but_notif_uuid.uuid, BT_GATT_CHRC_NOTIFY,
                            BT_GATT_PERM_READ, NULL, NULL, &but_val),
     BT_GATT_CCC(mpu_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE), );
@@ -114,6 +125,18 @@ static ssize_t recv(struct bt_conn *conn, const struct bt_gatt_attr *attr,
 
   requested_state = recieved_data;
 
+  return 0;
+}
+
+static ssize_t file_recv(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                         const void *buf, uint16_t len, uint16_t offset,
+                         uint8_t flags) {
+
+  char *recieved_data = (char *)buf;
+
+  LOG_INF("Bluetooth Recieved filename: %s", recieved_data);
+  strncpy(filename, recieved_data, MAX_FILENAME_SIZE);
+  filename[MAX_FILENAME_SIZE - 1] = '\0';
   return 0;
 }
 

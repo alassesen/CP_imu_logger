@@ -20,6 +20,7 @@ typedef enum { RED_LED, GREEN_LED, BLUE_LED } color_t;
 
 void led_update(int number, bool turn_on);
 int led_init(void);
+void led_log_light(void);
 
 #ifdef __cplusplus
 }

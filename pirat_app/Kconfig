@@ -73,5 +73,5 @@ endmenu
 # device stack. The scope of these options is limited to USB samples in project
 # tree, you cannot use them in your own application.
 source "samples/subsys/usb/common/Kconfig.sample_usbd"
-
+rsource "drivers/Kconfig"
 source "Kconfig.zephyr"

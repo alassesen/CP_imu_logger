@@ -28,26 +28,37 @@
 	};
 };
 
-&i2c1 {
-	mpu9250: mpu9250@12 {
-		status = "okay";
-		compatible = "invensense,mpu9250";
-		reg = <0x12>;
-		irq-gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
-		gyro-sr-div = <10>;
-		gyro-dlpf = <5>;
-		gyro-fs = <2000>;
-		accel-fs = <16>;
-		accel-dlpf = "5.05";
-	};
-};
-
 / {
 	msc_disk0 {
 		compatible = "zephyr,flash-disk";
 		partition = <&storage_partition>;
 		disk-name = "NAND";
 		cache-size = <65536>;
+	};
+
+	aliases {
+		my-icm20948 = &icm20948;
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	icm20948: icm20948@68 {
+		status = "okay";
+		compatible = "invensense,icm20948";
+		reg = <0x68>;
+		label = "ICM20948";
+		accel-fs = <0>; /* ICM20948_ACCEL_FS_SEL_2G */
+		accel-hz = <9>; /* Index into your sample rate divider array */
+		accel-fchoice = <0>;
+		accel-lpf = <0>;
+		gyro-fs = <0>; /* ICM20948_GYRO_FS_250 */
+		gyro-hz = <9>; /* Index into your sample rate divider array */
+		gyro-fchoice = <0>;
+		gyro-lpf = <0>;
+		mag-freq = <0>;
+		gyro-sample-rate-div = <9>; /* Example value for gyro sample rate divider */
+		accel-sample-rate-div = <9>; /* Example value for accel sample rate divider */
 	};
 };
 
@@ -56,10 +67,6 @@
 };
 
 &pwm0 {
-	status = "disabled";
-};
-
-&i2c1 {
 	status = "disabled";
 };
 

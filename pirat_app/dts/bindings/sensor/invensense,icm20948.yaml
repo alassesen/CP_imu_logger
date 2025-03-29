@@ -1,0 +1,108 @@
+#  Copyright (c) 2023, Lazaro O'Farrill
+#  email: lazaroofarrill@gmail.com
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  ICM20948 Motion sensor by invensense
+
+compatible: "invensense,icm20948"
+
+include: [sensor-device.yaml, i2c-device.yaml]
+
+properties:
+  reg:
+    required: true
+  int-gpios:
+    type: phandle-array
+    description: |
+      The INT signal default configuration is active-high. The
+      property value should ensure the flags properly describe the
+      signal that is presented to the driver.
+
+  accel-fchoice:
+    type: int
+    description: |
+      Toggle accelerometer filter in low-power mode.
+      Maps to ACCEL_FCHOICE field in ACCEL_CONFIG.
+    default: 0
+    enum: [0, 1]
+
+  accel-lpf:
+    type: int
+    description: |
+      Low pass filter configuration for accelerometer.
+      Maps to ACCEL_DLPFCFG field in ACCEL_CONFIG.
+    default: 0
+    enum: [0, 1, 2, 3, 4, 5, 6, 7]
+
+  accel-hz:
+    type: int  # Changed to int for index
+    description: |
+      Index into the accelerometer sample rate divider table.
+      Determines the accelerometer output data rate.
+      See the driver for the table mapping.
+    default: 9 # Example default value
+    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # Example enum values
+
+  gyro-fchoice:
+    type: int
+    description: |
+      Toggle gyroscope filter in low-power mode.
+      Maps to GYRO_FCHOICE field in GYRO_CONFIG_1.
+    default: 0
+    enum: [0, 1]
+
+  gyro-lpf:
+    type: int
+    description: |
+      Low pass filter configuration for gyroscope.
+      Maps to DLPF_CFG field in GYRO_CONFIG_1.
+    default: 0
+    enum: [0, 1, 2, 3, 4, 5, 6, 7]
+
+  gyro-hz:
+    type: int  # Changed to int for index
+    description: |
+      Index into the gyroscope sample rate divider table.
+      Determines the gyroscope output data rate.
+      See the driver for the table mapping.
+    default: 9 # Example default value
+    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] # Example enum values
+
+  accel-fs:
+    type: int
+    description: |
+      Accelerometer full-scale range. (Units: g)
+      Maps to ACCEL_FS_SEL field in ACCEL_CONFIG.
+    default: 0
+    enum: [0, 1, 2, 3] # Indexes for 2, 4, 8, 16g ranges
+
+  gyro-fs:
+    type: int
+    description: |
+      Gyroscope full-scale range. (Units: dps)
+      Maps to GYRO_FS_SEL field in GYRO_CONFIG_1.
+    default: 0
+    enum: [0, 1, 2, 3] # Indexes for 250, 500, 1000, 2000 dps ranges
+
+  mag-freq:
+    type: int
+    description: |
+      Magnetometer operation mode.
+      Maps to AK09916 CNTL2 register.
+    default: 0
+    enum: [0, 1, 2, 3] # Indexes for different continuous measurement modes
+
+  gyro-sample-rate-div:
+    type: int
+    description: |
+      Gyroscope sample rate divider.
+      Maps directly to GYRO_SMPLRT_DIV register.
+    default: 9
+
+  accel-sample-rate-div:
+    type: int
+    description: |
+      Accelerometer sample rate divider.
+      Maps directly to ACCEL_SMPLRT_DIV_1 and ACCEL_SMPLRT_DIV_2 registers.
+    default: 9

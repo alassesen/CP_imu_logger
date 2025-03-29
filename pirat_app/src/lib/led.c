@@ -84,3 +84,15 @@ int led_init(void) {
 
   return ret;
 }
+
+void led_log_light(void) {
+  static uint8_t led_idx = 0;
+  if (!led_ok) {
+    return;
+  }
+
+  gpio_pin_set(red_led.port, red_led.pin, 0);
+  led_idx = (led_idx + 1) % 5;
+  if (led_idx == 0)
+    gpio_pin_set(red_led.port, red_led.pin, 1);
+}

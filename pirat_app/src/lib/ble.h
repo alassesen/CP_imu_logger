@@ -3,6 +3,7 @@
 #include <zephyr/bluetooth/bluetooth.h>
 
 extern int requested_state;
+extern char filename[];
 
 typedef enum {
   SYSTEM_UNKNOWN_STATE,

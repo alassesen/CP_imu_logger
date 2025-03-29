@@ -6,6 +6,11 @@
  */
 #include "mass_storage_device.h"
 #include <ff.h>
+#include <zephyr/device.h>
+#include <zephyr/fs/fs.h>
+#include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
+#include <zephyr/storage/disk_access.h>
 
 LOG_MODULE_REGISTER(mass_storage);
 
@@ -13,11 +18,14 @@ LOG_MODULE_REGISTER(mass_storage);
 #define STORAGE_PARTITION storage_partition
 #define STORAGE_PARTITION_ID FIXED_PARTITION_ID(STORAGE_PARTITION)
 
-static FATFS fat_fs;
+USBD_DEFINE_MSC_LUN(nand, "NAND", "Zephyr", "FlashDisk", "0.00");
+
+static FATFS fat_fs = {
+    .fsize = 4096, .csize = 8, .n_fats = 1, .n_rootdir = 512};
 struct fs_mount_t fs_mnt = {
     .type = FS_FATFS,
     .fs_data = &fat_fs,
-    .flags = FS_MOUNT_FLAG_USE_DISK_ACCESS,
+    // .flags = FS_MOUNT_FLAG_USE_DISK_ACCESS,
     .mnt_point = DISK_MOUNT_PT,
 };
 
@@ -44,17 +52,15 @@ static int setup_flash(struct fs_mount_t *mnt) {
   return rc;
 }
 
-void setup_disk(void) {
+int setup_disk(void) {
   struct fs_mount_t *mp = &fs_mnt;
   int rc;
 
-  if (IS_ENABLED(CONFIG_DISK_DRIVER_FLASH)) {
-    rc = setup_flash(mp);
-    if (rc < 0) {
-      LOG_ERR("Failed to setup flash area");
-      return;
-    }
+  rc = setup_flash(mp);
+  if (rc < 0) {
+    LOG_ERR("Failed to setup flash area");
+    return -1;
   }
 
-  return;
+  return 0;
 }
