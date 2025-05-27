@@ -1,6 +1,7 @@
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
-# 3D-model til en luftraket prototype
+# 3D-model og vejledning til en luftraket prototype
+* [Anden generation](gen2)
 * [Første generation](gen1)
 
 # Introduktion til Solvespace
