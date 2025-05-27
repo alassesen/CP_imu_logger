@@ -1,8 +1,8 @@
 [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
 
 # Vejledning til tegning af 3D-model generation 2
-![Forside piratraket-guide](pirataket-guide-forside.png)
-[piratraket-guide.pdf](Pirat raket guide)
+![Forside piratraket-guide](piratraket-guide-forside.png)
+[Pirat raket guide](piratraket-guide.pdf)
 
 
 This work is licensed under a
